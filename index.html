@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Pygeoip : Pure Python API for Maxmind's binary GeoIP databases" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Pygeoip</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/appliedsec/pygeoip">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Pygeoip</h1>
+          <h2 id="project_tagline">Pure Python API for Maxmind's binary GeoIP databases</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/appliedsec/pygeoip/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/appliedsec/pygeoip/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>This is a pure Python alternative to <a href="http://www.maxmind.com/app/python">MaxMind's C-based Python API</a> for binary GeoIP databases. It is intended to make it easier to develop on Windows, or to simplify dependencies for things that don't require the speed/features of the C API. It is not entirely a drop-in replacement, but the most notable difference is the new and open methods are gone, in favor of instantiating the GeoIP class directly. The databases aren't distributed with the module, so you'll need to either buy them or download a lite edition <a href="http://www.maxmind.com/app/ip-location">here</a>. Requires Python 2.5 or higher (including Python 3).</p>
+
+<h2>Supported Flags</h2>
+
+<ul>
+<li>STANDARD (do all reads from disk, slowest)</li>
+<li>MEMORY_CACHE</li>
+<li>MMAP_CACHE (map the whole file to memory, fastest)</li>
+</ul><h2>Supported Databases</h2>
+
+<ul>
+<li>Country (Methods: country_code_by_name, country_code_by_addr, country_name_by_name, country_name_by_addr)</li>
+<li>City (Methods: record_by_name, record_by_addr, country_code_by_name, country_code_by_addr, country_name_by_name, country_name_by addr, region_by_name, region_by_addr, time_zone_by_addr, time_zone_by_name)</li>
+<li>ISP (Methods: org_by_name, org_by_addr)</li>
+<li>Organization (Methods: org_by_name, org_by_addr)</li>
+<li>Region (Methods: region_by_name, region_by_addr, country_code_by_name, country_code_by_addr, time_zone_by_addr, time_zone_by_name)</li>
+</ul><h1>Installation</h1>
+
+<p>If you have <a href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> installed, you can just run:</p>
+
+<p><code># easy_install pygeoip</code></p>
+
+<p>If not, you can just download the source and run:</p>
+
+<p><code># python setup.py install</code></p>
+
+<h1>Usage</h1>
+
+<p>Below are some examples of usage. You can view the latest API docs <a href="http://packages.python.org/pygeoip/">here</a>.</p>
+
+<h2>Country Database (<code>GeoIP.dat</code>)</h2>
+
+<pre><code>&gt;&gt;&gt; import pygeoip
+&gt;&gt;&gt; gi = pygeoip.GeoIP('/path/to/GeoIP.dat')
+&gt;&gt;&gt; gi.country_code_by_name('google.com')
+'US'
+&gt;&gt;&gt; gi.country_code_by_addr('64.233.161.99')
+'US'
+&gt;&gt;&gt; gi.country_name_by_name('google.com')
+'United States'
+&gt;&gt;&gt; gi.country_name_by_addr('64.233.161.99')
+'United States'
+</code></pre>
+
+<h2>City Database (<code>GeoIPCity.dat</code>)</h2>
+
+<pre><code>&gt;&gt;&gt; import pygeoip
+&gt;&gt;&gt; gic = pygeoip.GeoIP('/path/to/GeoIPCity.dat')
+&gt;&gt;&gt; gic.record_by_addr('64.233.161.99')
+{'city': 'Mountain View', 'region_name': 'CA', 'area_code': 650, 'longitude': -122.0574, 'country_code3': 'USA', 'latitude': 37.419199999999989, 'postal_code': '94043', 'dma_code': 807, 'country_code': 'US', 'country_name': 'United States'}
+&gt;&gt;&gt; gic.record_by_name('google.com')
+{'city': 'Mountain View', 'region_name': 'CA', 'area_code': 650, 'longitude': -122.0574, 'country_code3': 'USA', 'latitude': 37.419199999999989, 'postal_code': '94043', 'dma_code': 807, 'country_code': 'US', 'country_name': 'United States'}
+&gt;&gt;&gt; gic.region_by_name('google.com')
+{'region_name': 'CA', 'country_code': 'US'}
+&gt;&gt;&gt; gic.region_by_addr('64.233.161.99')
+{'region_name': 'CA', 'country_code': 'US'}
+&gt;&gt;&gt; gic.time_zone_by_name('google.com')
+'America/Los_Angeles'
+&gt;&gt;&gt; gic.time_zone_by_addr('64.233.161.99')
+'America/Los_Angeles'
+</code></pre>
+
+<h2>Org/ISP Database (<code>GeoIPOrg.dat</code> or <code>GeoIPISP.dat</code>)</h2>
+
+<pre><code>&gt;&gt;&gt; import pygeoip
+&gt;&gt;&gt; gio = pygeoip.GeoIP('/path/to/GeoIPOrg.dat')
+&gt;&gt;&gt; gio.org_by_addr('64.233.161.99')
+'Google'
+&gt;&gt;&gt; gio.org_by_name('google.com')
+'Google'
+</code></pre>
+
+<h2>Region Database (<code>GeoIPRegion.dat</code>)</h2>
+
+<pre><code>&gt;&gt;&gt; import pygeoip
+&gt;&gt;&gt; gir = pygeoip.GeoIP('/path/to/GeoIPRegion.dat')
+&gt;&gt;&gt; gir.region_by_name('yahoo.com')
+{'region_name': 'CA', 'country_code': 'US'}
+&gt;&gt;&gt; gir.region_by_addr('209.131.36.159')
+{'region_name': 'CA', 'country_code': 'US'}
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Pygeoip maintained by <a href="https://github.com/appliedsec">appliedsec</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
