@@ -300,8 +300,8 @@ class GeoIP(GeoIPBase):
                     country_code = const.COUNTRY_CODES[index]
         elif self._databaseType in const.CITY_EDITIONS:
             rec = self._get_record(ipnum)
-            country_code = rec['country_code'] if 'country_code' in rec else ''
-            region = rec['region_name'] if 'region_name' in rec else ''
+            country_code = rec['country_code'] if rec and 'country_code' in rec else ''
+            region = rec['region_name'] if rec and 'region_name' in rec else ''
 
         return {'country_code': country_code, 'region_name': region}
 
